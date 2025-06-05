@@ -1,0 +1,651 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Game Page Generator</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: #0d1117;
+            color: #e6edf3;
+            line-height: 1.6;
+            min-height: 100vh;
+        }
+
+        .main-container {
+            display: grid;
+            grid-template-columns: 1fr 350px;
+            gap: 20px;
+            max-width: 1600px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .content {
+            max-width: 1200px;
+        }
+
+        .side-panel {
+            background: #161b22;
+            border: 1px solid #21262d;
+            border-radius: 12px;
+            padding: 20px;
+            height: fit-content;
+            position: sticky;
+            top: 20px;
+        }
+
+        .side-panel h3 {
+            color: #58a6ff;
+            margin-bottom: 20px;
+            font-size: 1.3rem;
+            text-align: center;
+            border-bottom: 1px solid #21262d;
+            padding-bottom: 10px;
+        }
+
+        .panel-section {
+            margin-bottom: 20px;
+            padding: 15px;
+            background: #0d1117;
+            border: 1px solid #21262d;
+            border-radius: 8px;
+        }
+
+        .panel-section h4 {
+            color: #f0f6fc;
+            margin-bottom: 10px;
+            font-size: 0.9rem;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .panel-content {
+            color: #8b949e;
+            font-size: 0.85rem;
+            line-height: 1.4;
+            margin-bottom: 10px;
+            padding: 8px;
+            background: #161b22;
+            border-radius: 4px;
+            border: 1px solid #30363d;
+            word-wrap: break-word;
+        }
+
+        .copy-btn {
+            background: linear-gradient(135deg, #58a6ff, #1f6feb);
+            color: white;
+            border: none;
+            padding: 6px 12px;
+            border-radius: 4px;
+            font-size: 11px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.2s;
+            width: 100%;
+        }
+
+        .copy-btn:hover {
+            background: linear-gradient(135deg, #1f6feb, #58a6ff);
+            transform: translateY(-1px);
+        }
+
+        .categories-list {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 5px;
+            margin-bottom: 10px;
+        }
+
+        .category-tag {
+            background: #21262d;
+            color: #e6edf3;
+            padding: 4px 8px;
+            border-radius: 12px;
+            font-size: 0.75rem;
+            border: 1px solid #30363d;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 40px;
+            padding: 20px 0;
+            border-bottom: 1px solid #21262d;
+        }
+
+        .header h1 {
+            color: #58a6ff;
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+        }
+
+        .header p {
+            color: #8b949e;
+            font-size: 1.1rem;
+        }
+
+        .form-section {
+            background: #161b22;
+            border: 1px solid #21262d;
+            border-radius: 12px;
+            padding: 30px;
+            margin-bottom: 20px;
+        }
+
+        .form-section h2 {
+            color: #f0f6fc;
+            margin-bottom: 20px;
+            font-size: 1.4rem;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .form-section h2::before {
+            content: "▶";
+            color: #58a6ff;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 8px;
+            color: #f0f6fc;
+            font-weight: 500;
+        }
+
+        input[type="text"], input[type="url"], textarea {
+            width: 100%;
+            padding: 12px;
+            background: #0d1117;
+            border: 1px solid #30363d;
+            border-radius: 8px;
+            color: #e6edf3;
+            font-size: 14px;
+            transition: border-color 0.2s, box-shadow 0.2s;
+        }
+
+        input[type="text"]:focus, input[type="url"]:focus, textarea:focus {
+            outline: none;
+            border-color: #58a6ff;
+            box-shadow: 0 0 0 3px rgba(88, 166, 255, 0.1);
+        }
+
+        textarea {
+            resize: vertical;
+            min-height: 100px;
+        }
+
+        .btn {
+            background: linear-gradient(135deg, #238636, #2ea043);
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 8px;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .btn:hover {
+            background: linear-gradient(135deg, #2ea043, #238636);
+            transform: translateY(-1px);
+            box-shadow: 0 4px 12px rgba(46, 160, 67, 0.3);
+        }
+
+        .btn:active {
+            transform: translateY(0);
+        }
+
+        .btn-secondary {
+            background: linear-gradient(135deg, #58a6ff, #1f6feb);
+        }
+
+        .btn-secondary:hover {
+            background: linear-gradient(135deg, #1f6feb, #58a6ff);
+            box-shadow: 0 4px 12px rgba(88, 166, 255, 0.3);
+        }
+
+        .btn:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+            transform: none !important;
+        }
+
+        .loading {
+            display: none;
+            text-align: center;
+            padding: 20px;
+            color: #58a6ff;
+        }
+
+        .loading.active {
+            display: block;
+        }
+
+        .spinner {
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            border: 2px solid #21262d;
+            border-radius: 50%;
+            border-top-color: #58a6ff;
+            animation: spin 1s ease-in-out infinite;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        .alert {
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            display: none;
+        }
+
+        .alert.success {
+            background: rgba(46, 160, 67, 0.1);
+            border: 1px solid #2ea043;
+            color: #2ea043;
+        }
+
+        .alert.error {
+            background: rgba(248, 81, 73, 0.1);
+            border: 1px solid #f85149;
+            color: #f85149;
+        }
+
+        .alert.show {
+            display: block;
+        }
+
+        .game-info {
+            display: none;
+            background: #0d1117;
+            border: 1px solid #21262d;
+            border-radius: 8px;
+            padding: 20px;
+            margin-top: 20px;
+        }
+
+        .game-info.show {
+            display: block;
+        }
+
+        .game-info h3 {
+            color: #58a6ff;
+            margin-bottom: 15px;
+        }
+
+        .info-item {
+            margin-bottom: 10px;
+        }
+
+        .info-item strong {
+            color: #f0f6fc;
+        }
+
+        .row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+        }
+
+        .file-links {
+            display: none;
+            background: #161b22;
+            border: 1px solid #21262d;
+            border-radius: 8px;
+            padding: 20px;
+            margin-top: 20px;
+        }
+
+        .file-links.show {
+            display: block;
+        }
+
+        .file-links h4 {
+            color: #58a6ff;
+            margin-bottom: 15px;
+        }
+
+        .file-link {
+            display: inline-block;
+            margin: 5px 10px 5px 0;
+            padding: 8px 16px;
+            background: #21262d;
+            border-radius: 6px;
+            color: #e6edf3;
+            text-decoration: none;
+            font-size: 14px;
+            transition: background-color 0.2s;
+        }
+
+        .file-link:hover {
+            background: #30363d;
+        }
+
+        @media (max-width: 1200px) {
+            .main-container {
+                grid-template-columns: 1fr;
+                gap: 20px;
+            }
+            
+            .side-panel {
+                position: static;
+                order: -1;
+            }
+            
+            .header h1 {
+                font-size: 2rem;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .row {
+                grid-template-columns: 1fr;
+            }
+            
+            .main-container {
+                padding: 15px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="main-container">
+        <div class="content">
+            <div class="header">
+                <h1>🎮 Game Page Generator</h1>
+                <p>Generate game pages from Steam App IDs with custom download links</p>
+            </div>
+
+            <div id="alerts"></div>
+
+            <!-- Step 1: Fetch Game Info -->
+            <div class="form-section">
+                <h2>Step 1: Fetch Game Information</h2>
+                <div class="form-group">
+                    <label for="appid">Steam App ID:</label>
+                    <input type="text" id="appid" placeholder="">
+                </div>
+                <button class="btn btn-secondary" onclick="fetchGameInfo()">
+                    <span class="spinner" id="fetch-spinner"></span>
+                    Fetch Game Info
+                </button>
+            </div>
+
+            <!-- Game Info Display -->
+            <div id="game-info" class="game-info">
+                <h3>Game Information</h3>
+                <div id="game-details"></div>
+            </div>
+
+            <!-- Step 2: Additional Details -->
+            <div class="form-section">
+                <h2>Step 2: Additional Game Details</h2>
+                <div class="row">
+                    <div class="form-group">
+                        <label for="game-size">Game Size:</label>
+                        <input type="text" id="game-size" placeholder="">
+                    </div>
+                    <div class="form-group">
+                        <label for="released-by">Released By:</label>
+                        <input type="text" id="released-by" placeholder="">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="version">Version:</label>
+                    <input type="text" id="version" placeholder="">
+                </div>
+            </div>
+
+            <!-- Step 3: Download Links -->
+            <div class="form-section">
+                <h2>Step 3: Download Links</h2>
+                <div class="form-group">
+                    <label for="gofile-link">GoFile Link:</label>
+                    <input type="url" id="gofile-link" placeholder="">
+                </div>
+                <div class="form-group">
+                    <label for="buzzheavier-link">Buzzheavier Link:</label>
+                    <input type="url" id="buzzheavier-link" placeholder="">
+                </div>
+            </div>
+
+            <!-- Step 4: Custom Thumbnail -->
+            <div class="form-section">
+                <h2>Step 4: Custom Thumbnail (Optional)</h2>
+                <div class="form-group">
+                    <label for="thumbnail-url">Thumbnail URL:</label>
+                    <input type="url" id="thumbnail-url" placeholder="">
+                </div>
+            </div>
+
+            <!-- Copy Code Button -->
+            <div class="form-section">
+                <button class="btn" onclick="copyCode()">
+                    <span class="spinner" id="generate-spinner"></span>
+                    Copy Code
+                </button>
+            </div>
+
+            <!-- HTML Code Display -->
+            <div id="html-code" class="file-links">
+                <h4>Generated HTML Code:</h4>
+                <textarea id="html-output" readonly style="width: 100%; height: 300px; font-family: 'Courier New', monospace; font-size: 12px; background: #0d1117; color: #e6edf3; border: 1px solid #21262d; border-radius: 8px; padding: 15px; resize: vertical;"></textarea>
+                <br><br>
+                <button class="btn btn-secondary" onclick="copyToClipboard()">Copy to Clipboard</button>
+            </div>
+        </div>
+
+        <!-- Side Panel -->
+        <div class="side-panel">
+            <h3>📋 SEO & Meta Data</h3>
+            
+            <!-- Publisher Section -->
+            <div class="panel-section">
+                <h4>Publisher</h4>
+                <div class="panel-content" id="publisher-content">No game data loaded</div>
+                <button class="copy-btn" onclick="copyToClipboard('publisher-content')">Copy Publisher</button>
+            </div>
+
+            <!-- Categories Section -->
+            <div class="panel-section">
+                <h4>Categories</h4>
+                <div class="categories-list" id="categories-content">
+                    <span style="color: #8b949e; font-size: 0.85rem;">No game data loaded</span>
+                </div>
+            </div>
+
+            <!-- Focus Keyphrase Section -->
+            <div class="panel-section">
+                <h4>Focus Keyphrase</h4>
+                <div class="panel-content" id="keyphrase-content">No game data loaded</div>
+                <button class="copy-btn" onclick="copyToClipboard('keyphrase-content')">Copy Keyphrase</button>
+            </div>
+
+            <!-- Meta Description Section -->
+            <div class="panel-section">
+                <h4>Meta Description</h4>
+                <div class="panel-content" id="meta-content">No game data loaded</div>
+                <button class="copy-btn" onclick="copyToClipboard('meta-content')">Copy Meta</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let gameData = {};
+
+        function showAlert(message, type = 'error') {
+            const alertsContainer = document.getElementById('alerts');
+            const alert = document.createElement('div');
+            alert.className = `alert ${type} show`;
+            alert.textContent = message;
+            alertsContainer.appendChild(alert);
+            
+            setTimeout(() => {
+                alert.remove();
+            }, 5000);
+        }
+
+        function showLoading(elementId, show) {
+            const spinner = document.getElementById(elementId);
+            if (show) {
+                spinner.style.display = 'inline-block';
+            } else {
+                spinner.style.display = 'none';
+            }
+        }
+
+        async function fetchGameInfo() {
+            const appid = document.getElementById('appid').value.trim();
+            
+            if (!appid) {
+                showAlert('Please enter a Steam App ID');
+                return;
+            }
+
+            showLoading('fetch-spinner', true);
+            
+            try {
+                const response = await fetch('/fetch_game_info', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({ appid })
+                });
+
+                const data = await response.json();
+
+                if (!response.ok) {
+                    throw new Error(data.error || 'Failed to fetch game info');
+                }
+
+                gameData = data;
+                displayGameInfo(data);
+                updateSidePanel(data);
+                showAlert('Game information fetched successfully!', 'success');
+
+            } catch (error) {
+                showAlert(error.message);
+            } finally {
+                showLoading('fetch-spinner', false);
+            }
+        }
+
+        function displayGameInfo(data) {
+            const gameInfo = document.getElementById('game-info');
+            const gameDetails = document.getElementById('game-details');
+            
+            gameDetails.innerHTML = `
+                <div class="info-item"><strong>Name:</strong> ${data.game_name}</div>
+                <div class="info-item"><strong>Developer:</strong> ${data.developer || 'N/A'}</div>
+                <div class="info-item"><strong>Publisher:</strong> ${data.publisher || 'N/A'}</div>
+                <div class="info-item"><strong>Genres:</strong> ${data.genres.join(', ') || 'N/A'}</div>
+                <div class="info-item"><strong>Screenshots Found:</strong> ${data.ss1_url && data.ss2_url ? '2' : data.ss1_url || data.ss2_url ? '1' : '0'}</div>
+            `;
+            
+            gameInfo.classList.add('show');
+        }
+
+        function updateSidePanel(data) {
+            // Update Publisher
+            const publisherContent = document.getElementById('publisher-content');
+            publisherContent.textContent = data.publisher || 'N/A';
+
+            // Update Categories
+            const categoriesContent = document.getElementById('categories-content');
+            if (data.categories && data.categories.length > 0) {
+                categoriesContent.innerHTML = data.categories.map(category => 
+                    `<span class="category-tag">${category}</span>`
+                ).join('');
+            } else {
+                categoriesContent.innerHTML = '<span style="color: #8b949e; font-size: 0.85rem;">No categories found</span>';
+            }
+
+            // Update Focus Keyphrase
+            const keyphraseContent = document.getElementById('keyphrase-content');
+            keyphraseContent.textContent = data.focus_keyphrase || 'N/A';
+
+            // Update Meta Description
+            const metaContent = document.getElementById('meta-content');
+            metaContent.textContent = data.meta_description || 'N/A';
+        }
+
+        async function copyCode() {
+            if (!gameData.game_name) {
+                showAlert('Please fetch game information first');
+                return;
+            }
+
+            // Collect all form data
+            const formData = {
+                ...gameData,
+                game_size: document.getElementById('game-size').value.trim(),
+                released_by: document.getElementById('released-by').value.trim(),
+                version: document.getElementById('version').value.trim(),
+                gofile_link: document.getElementById('gofile-link').value.trim(),
+                buzzheavier_link: document.getElementById('buzzheavier-link').value.trim(),
+                thumbnail_url: document.getElementById('thumbnail-url').value.trim()
+            };
+
+            showLoading('generate-spinner', true);
+
+            try {
+                const response = await fetch('/generate_page', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify(formData)
+                });
+
+                const data = await response.json();
+
+                if (!response.ok) {
+                    throw new Error(data.error || 'Failed to generate code');
+                }
+
+                // Display the HTML code
+                document.getElementById('html-output').value = data.html_content;
+                document.getElementById('html-code').classList.add('show');
+                showAlert('HTML code generated successfully!', 'success');
+
+            } catch (error) {
+                showAlert(error.message || 'Failed to generate HTML');
+            } finally {
+                showLoading('generate-spinner', false);
+            }
+        }
+
+        function copyToClipboard(id = 'html-output') {
+            const element = document.getElementById(id);
+            if (!element) {
+                showAlert('Element to copy not found');
+                return;
+            }
+
+            navigator.clipboard.writeText(element.value || element.textContent)
+                .then(() => showAlert('Copied to clipboard!', 'success'))
+                .catch(err => showAlert('Failed to copy', 'error'));
+        }
+    </script>
+</body>
+</html>
